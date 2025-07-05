@@ -1,5 +1,6 @@
 'use server';
 
+import { stackServerApp } from '@/stack'; // ******************* stackServerApp 가져오기
 import { neon } from '@neondatabase/serverless';
 
 // 사용자 세부 정보 가져오는 함수
@@ -18,4 +19,14 @@ export async function getUserDetails(userId: string | undefined) {
         await sql`SELECT * FROM neon_auth.users_sync WHERE id = ${userId};`;
 
     return user; // 가져온 사용자 상세 정보 반환
+}
+
+// ******************* neon db에서 사용자의 id를 가져오는 함수
+export async function getUserId() {
+    const user = await stackServerApp.getUser(); // neon 에서 사용자 정보를 얻어서..
+    const userId = user?.id; // 사용자 id 를 저장
+
+    if (!userId) return;
+
+    return userId;
 }
