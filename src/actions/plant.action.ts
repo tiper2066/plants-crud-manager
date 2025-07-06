@@ -29,3 +29,10 @@ export async function getPlants(searchTerm?: string) {
         throw new Error('Failed to fetch plants');
     }
 }
+
+// 특정 사용자 id 와 일치하는 Plant 테이블 데이터 가져오기
+export async function getPlantById(id: string) {
+    return await prisma.plant.findUnique({
+        where: { id },
+    });
+}
