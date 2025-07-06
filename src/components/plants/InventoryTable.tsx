@@ -13,7 +13,8 @@ import { Search } from 'lucide-react';
 import { ComboBox } from './ComboBox';
 import { useState } from 'react'; //  useState 훅
 import { getPlants } from '@/actions/plant.action'; //  추가
-import { useRouter } from 'next/navigation'; // ******************************* useRouter 훅
+import { useRouter } from 'next/navigation'; //  useRouter 훅
+import { Skeleton } from '../ui/skeleton'; // ************************ Skeleton 컴포넌트 추가
 
 //  InventoryTableProps 타입의 선언
 type Plant = Awaited<ReturnType<typeof getPlants>>; // 서버액션 함수를 이용 데이터 타입가져옴
@@ -22,7 +23,7 @@ interface InventoryTableProps {
 }
 //  InventoryTableProps 타입의 plants 테이블 데이터를 props 로 전달받음
 const InventoryTable = ({ plants }: InventoryTableProps) => {
-    const router = useRouter(); // ******************************* Router 객체 생성
+    const router = useRouter(); //  Router 객체 생성
     const [selectedCategory, setSelectedCategory] = useState(''); //  현재선택 카테고리 상태변수
     const [searchTerm, setSearchTerm] = useState(''); //  검색어 상태변수
 
@@ -33,6 +34,42 @@ const InventoryTable = ({ plants }: InventoryTableProps) => {
             plant.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
             (selectedCategory === '' || plant.category === selectedCategory)
     );
+
+    // plants 테이블에서 가져온 데이터가 없을 경우 표시할 테이블 UI
+    if (!plants) {
+        return (
+            <div className="w-full space-y-4">
+                <div className="flex items-center gap-2 py-4">
+                    <Skeleton className="h-10 w-full max-w-sm" />
+                    <Skeleton className="h-10 w-32" />
+                    <Skeleton className="h-10 w-32" />
+                </div>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Plant ID</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Category</TableHead>
+                            <TableHead>Price</TableHead>
+                            <TableHead>Stock</TableHead>
+                            <TableHead className="text-right">
+                                Actions
+                            </TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody></TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={5}>Total</TableCell>
+                            <TableCell className="text-right">
+                                $2,500.00
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
+        );
+    }
 
     return (
         <div className="w-full">
@@ -67,7 +104,7 @@ const InventoryTable = ({ plants }: InventoryTableProps) => {
                 <TableBody>
                     {/*  검색어 필터링된 데이터로(filteredPlants) plants 테이블 데이터를 테이블로 출력 */}
                     {filteredPlants?.map((plant: any) => {
-                        // ****************************************** slug 라우팅 경로 생성
+                        //  slug 라우팅 경로 생성
                         const slugifiedName = plant.name
                             .toLowerCase() // 이름을 소문자로 변경한 후,
                             .replace(/\s+/g, '-'); // 하나 이상의 공백을 '-' 로 변경함 (예, "John Doe" -> "john-doe")
@@ -77,8 +114,8 @@ const InventoryTable = ({ plants }: InventoryTableProps) => {
                         return (
                             <TableRow
                                 key={plant.id}
-                                onClick={() => router.push(plantUrl)} // ******************************** 상세 페이지로 이동 클릭핸들러 추가
-                                className="cursor-pointer" // ***************************** 마우스 오버시 커서 손바닥 변경
+                                onClick={() => router.push(plantUrl)} //  상세 페이지로 이동 클릭핸들러 추가
+                                className="cursor-pointer" //  마우스 오버시 커서 손바닥 변경
                             >
                                 <TableCell>{plant.id}</TableCell>
                                 <TableCell>{plant.name}</TableCell>

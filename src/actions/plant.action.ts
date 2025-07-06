@@ -25,7 +25,7 @@ export async function getPlants(searchTerm?: string) {
 
         return { success: true, userPlants }; // 가져오기 성공시 가져온 데이터 반환
     } catch (error) {
-        console.log('Error in getPlants', error);
+        // console.log('Error in getPlants', error);
         throw new Error('Failed to fetch plants');
     }
 }
