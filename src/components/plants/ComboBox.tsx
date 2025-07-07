@@ -23,13 +23,16 @@ interface ComboboxProps {
     onChange: (value: string) => void;
 }
 
-const productCategories = [
+const plantCategories = [
     { value: '-', label: 'None' },
-    { value: 'code', label: 'Code Projects' },
-    { value: 'courses', label: 'Mini-Courses' },
-    { value: 'guides', label: 'PDF Guides' },
-    { value: 'templates', label: 'Productivity Templates' },
-    { value: 'snippets', label: 'Reference Snippets' },
+    { value: 'indoor', label: 'Indoor' },
+    { value: 'outdoor', label: 'Outdoor' },
+    { value: 'Succulent', label: 'Succulent' },
+    { value: 'flowering', label: 'Flowering' },
+    { value: 'herb', label: 'Herb' },
+    { value: 'fern', label: 'Fern' },
+    { value: 'tree', label: 'Tree' },
+    { value: 'shrub', label: 'Shrub' },
 ];
 
 export function ComboBox({ value, onChange }: ComboboxProps) {
@@ -39,25 +42,25 @@ export function ComboBox({ value, onChange }: ComboboxProps) {
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    variant="outline"
-                    role="combobox"
+                    variant='outline'
+                    role='combobox'
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className='w-[200px] justify-between'
                 >
                     {value ? value : 'Select category...'}
-                    <ChevronsUpDown className="opacity-50" />
+                    <ChevronsUpDown className='opacity-50' />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className='w-[200px] p-0'>
                 <Command>
                     <CommandInput
-                        placeholder="Search category..."
-                        className="h-9"
+                        placeholder='Search category...'
+                        className='h-9'
                     />
                     <CommandList>
                         <CommandEmpty>No category found.</CommandEmpty>
                         <CommandGroup>
-                            {productCategories.map((cat) => (
+                            {plantCategories.map((cat) => (
                                 <CommandItem
                                     key={cat.value}
                                     value={cat.value}

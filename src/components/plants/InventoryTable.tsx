@@ -14,7 +14,10 @@ import { ComboBox } from './ComboBox';
 import { useState } from 'react'; //  useState 훅
 import { getPlants } from '@/actions/plant.action'; //  추가
 import { useRouter } from 'next/navigation'; //  useRouter 훅
-import { Skeleton } from '../ui/skeleton'; // ************************ Skeleton 컴포넌트 추가
+import { Skeleton } from '../ui/skeleton'; //  Skeleton 컴포넌트 추가
+import CreateDialog from './CreateDialog'; //  CreateDialog 컴포넌트 추가
+import EditDialog from './EditDialog'; //  EditDialog 컴포넌트 추가
+import DeleteDialog from './DeleteDialog'; // *********************** DeleteDialog 컴포넌트 추가
 
 //  InventoryTableProps 타입의 선언
 type Plant = Awaited<ReturnType<typeof getPlants>>; // 서버액션 함수를 이용 데이터 타입가져옴
@@ -35,59 +38,86 @@ const InventoryTable = ({ plants }: InventoryTableProps) => {
             (selectedCategory === '' || plant.category === selectedCategory)
     );
 
-    // plants 테이블에서 가져온 데이터가 없을 경우 표시할 테이블 UI
+    //  plants 테이블에서 가져온 데이터가 없을 경우 표시할 테이블 UI
     if (!plants) {
         return (
-            <div className="w-full space-y-4">
-                <div className="flex items-center gap-2 py-4">
-                    <Skeleton className="h-10 w-full max-w-sm" />
-                    <Skeleton className="h-10 w-32" />
-                    <Skeleton className="h-10 w-32" />
+            <div className='w-full space-y-4'>
+                <div className='flex items-center gap-2 py-4'>
+                    <Skeleton className='h-10 w-full max-w-sm' />
+                    <Skeleton className='h-10 w-32' />
+                    <Skeleton className='h-10 w-32' />
                 </div>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Plant ID</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Category</TableHead>
-                            <TableHead>Price</TableHead>
-                            <TableHead>Stock</TableHead>
-                            <TableHead className="text-right">
-                                Actions
+                            <TableHead>
+                                <Skeleton className='w-full h-4' />
+                            </TableHead>
+                            <TableHead>
+                                <Skeleton className='w-full h-4' />
+                            </TableHead>
+                            <TableHead>
+                                <Skeleton className='w-full h-4' />
+                            </TableHead>
+                            <TableHead>
+                                <Skeleton className='w-full h-4' />
+                            </TableHead>
+                            <TableHead>
+                                <Skeleton className='w-full h-4' />
+                            </TableHead>
+                            <TableHead className='text-right'>
+                                <Skeleton className='w-full h-4' />
                             </TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody></TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TableCell colSpan={5}>Total</TableCell>
-                            <TableCell className="text-right">
-                                $2,500.00
-                            </TableCell>
-                        </TableRow>
-                    </TableFooter>
+                    <TableBody>
+                        {Array.from({ length: 5 }).map((_, index) => (
+                            <TableRow key={index}>
+                                <TableCell>
+                                    <Skeleton className='w-full h-4' />
+                                </TableCell>
+                                <TableCell>
+                                    <Skeleton className='w-full h-4' />
+                                </TableCell>
+                                <TableCell>
+                                    <Skeleton className='w-full h-4' />
+                                </TableCell>
+                                <TableCell>
+                                    <Skeleton className='w-full h-4' />
+                                </TableCell>
+                                <TableCell>
+                                    <Skeleton className='w-full h-4' />
+                                </TableCell>
+                                <TableCell className='text-right'>
+                                    <Skeleton className='w-full h-4' />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
                 </Table>
             </div>
         );
     }
 
     return (
-        <div className="w-full">
-            <div className="flex items-center gap-2 py-4">
-                <div className="relative max-w-sm w-full">
+        <div className='w-full'>
+            <div className='flex items-center gap-2 py-4'>
+                <div className='relative max-w-sm w-full'>
                     <Input
-                        placeholder="Filter plants..."
-                        className="pl-10"
+                        placeholder='Filter plants...'
+                        className='pl-10'
                         value={searchTerm} //  검색어 상태변수
                         onChange={(e) => setSearchTerm(e.target.value)} //  검색어 상태변수를 업데이트
                     />
                     {/* 돋보기 아이콘: inpu 필드 left 3 x 4 = 12px, top 50%, 위로 -50% 위치 설정 */}
-                    <Search className="absolute w-4 h-4 left-3 top-1/2 transform -translate-y-1/2" />
+                    <Search className='absolute w-4 h-4 left-3 top-1/2 transform -translate-y-1/2' />
                 </div>
                 <ComboBox
                     value={selectedCategory} //  현재 선택 카테고리 값 설정
                     onChange={(val) => setSelectedCategory(val)} //  사용자가 선택한 카테고리 값으로 변경
                 />
+                {/*  Dialog 추가 */}
+                <CreateDialog />
             </div>
 
             <Table>
@@ -98,7 +128,7 @@ const InventoryTable = ({ plants }: InventoryTableProps) => {
                         <TableHead>Category</TableHead>
                         <TableHead>Price</TableHead>
                         <TableHead>Stock</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead className='text-right'>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -115,19 +145,24 @@ const InventoryTable = ({ plants }: InventoryTableProps) => {
                             <TableRow
                                 key={plant.id}
                                 onClick={() => router.push(plantUrl)} //  상세 페이지로 이동 클릭핸들러 추가
-                                className="cursor-pointer" //  마우스 오버시 커서 손바닥 변경
+                                className='cursor-pointer' //  마우스 오버시 커서 손바닥 변경
                             >
                                 <TableCell>{plant.id}</TableCell>
                                 <TableCell>{plant.name}</TableCell>
                                 <TableCell>{plant.category}</TableCell>
                                 <TableCell>{plant.price}</TableCell>
-                                <TableCell className="font-bold">
+                                <TableCell className='font-bold'>
                                     {plant.stock}
                                 </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex justify-end space-x-4">
-                                        <h1>Edit Button</h1>
-                                        <h1>Delete Button</h1>
+                                <TableCell className='text-right'>
+                                    <div
+                                        className='flex justify-end space-x-4'
+                                        //  이미 전체 row 에 링크가 걸려있기에 이 요소의 클릭버튼 시 상위 요소의 클릭이벤트를 차단함
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <EditDialog plant={plant} />
+                                        {/* ********************************** Delete Dialog 컴포넌트 추가  */}
+                                        <DeleteDialog plant={plant} />
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -137,7 +172,7 @@ const InventoryTable = ({ plants }: InventoryTableProps) => {
                 <TableFooter>
                     <TableRow>
                         <TableCell colSpan={5}>Total</TableCell>
-                        <TableCell className="text-right">$2,500.00</TableCell>
+                        <TableCell className='text-right'>$2,500.00</TableCell>
                     </TableRow>
                 </TableFooter>
             </Table>
