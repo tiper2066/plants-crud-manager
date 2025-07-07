@@ -31,7 +31,7 @@ function ImageUpload({ endpoint, onChange, value }: ImageUploadProps) {
     }
     // 업로드된 이미지가 없고, Choose File 버튼 클릭하면.. 파일이 업로드되고.. 업로드 완료 시 이미지를 표시함
     return (
-        <div className='flex items-center'>
+        <div className='flex items-center img_upload_container'>
             <UploadDropzone<OurFileRouter, 'postImage'>
                 endpoint={endpoint}
                 onClientUploadComplete={(res) => {

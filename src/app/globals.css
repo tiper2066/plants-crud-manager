@@ -124,3 +124,7 @@
         cursor: pointer;
     }
 }
+
+body .img_upload_container button {
+    color: orange;
+}
